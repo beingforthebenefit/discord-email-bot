@@ -1,9 +1,9 @@
-require('dotenv').config();
-
 const Discord = require('discord.js');
 const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
 const emailMap = require('./channelEmailMap.json');
 
+dotenv.config();
 
 const client = new Discord.Client({
   intents: [
@@ -42,7 +42,19 @@ client.on('messageCreate', async message => {
   }
 
   let replyToEmail = emailMap[message.channel.name];
-  if (!replyToEmail) return;
+  if (!replyToEmail) {
+    console.error(`No mapping found for channel: ${channel.name}`);
+    return;
+  };
+
+  // prepare the attachments
+  let emailAttachments = [];
+  message.attachments.each(attachment => {
+    emailAttachments.push({
+      filename: attachment.name,
+      path: attachment.url
+    });
+  });
 
   let mailOptions = {
     from: process.env.EMAIL_USER,
@@ -51,7 +63,8 @@ client.on('messageCreate', async message => {
     subject: `New message in #${message.channel.name}`,
     text: `${message.author.username}: ${message.content}
     
-    Reply to this email to post a reply in #${message.channel.name}`,
+Reply to this email to post a reply in #${message.channel.name}`,
+    attachments: emailAttachments
   };
 
   transporter.sendMail(mailOptions, function(error, info){
