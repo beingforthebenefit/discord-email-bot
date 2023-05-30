@@ -1,0 +1,13 @@
+{
+  "name": "discord-email-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for forwarding messages to email",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "nodemailer": "^6.7.2"
+  }
+}
