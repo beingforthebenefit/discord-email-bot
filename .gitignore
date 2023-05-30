@@ -93,3 +93,6 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+# Channel map (see README)
+channelEmailMap.json
